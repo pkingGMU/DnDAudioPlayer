@@ -1,39 +1,27 @@
 # Local Imports
-from pydub import AudioSegment
-from pydub.playback import play
+import pygame
 import time
 import os
 import random 
+import threading
+import sys
 
-
-def get_random_song(folder: str):
+def play_theme(folder: str, fade_in_duration: int = 20000):
     '''
-    Function to get a random song from a folder
-    '''
-    return random.choice(os.listdir(folder))
-
-def play_music(song: str):
-    '''
-    Function to play music
-    '''
-    audio = AudioSegment.from_file(song, format='mp3')
-
-    print(f'Playing Music... {song}')
-
-
-def theme_selector(selection: int):
-    '''
-    Input: selection (int)
+    Function to play a theme from a folder
     '''
 
-    # Check Selection
-    if selection == 1:
-        # Console Log
-        print('Adventure Theme Selected')
-        # Play Random Adventure Theme from the Adventure Folder
-        play_music(get_random_song(r'C:\Users\patk1\OneDrive\Desktop\Git Hub\DnDAudioPlayer\Adventure'))
-    elif selection == 2:
-        print('Combat Theme Selected')
+    full_path = os.path.join(folder, random.choice(os.listdir(folder)))
+
+    pygame.mixer.music.load(full_path)
+    pygame.mixer.music.play(-1, fade_ms=fade_in_duration)  # -1 means loop indefinitely
+
+
+def stop_music(fade_out_duration: int = 20000):
+    '''
+    Function to stop music
+    '''
+    pygame.mixer.music.fadeout(fade_out_duration)
 
 
 def main():
@@ -41,9 +29,58 @@ def main():
     Main function to run the script
     '''
 
-    # Print Menu of Options
-    print(f'Select a musically theme for your DnD game! \n1. Adventure \n2. Combat')
-    theme_selector(int(input('Selection: ')))
+    # Init Pygame and Pygame Mixer
+    pygame.init()
+    pygame.mixer.init()
+
+    # Location of music theme folders
+    adventure_folder = r'C:\Users\patk1\OneDrive\Desktop\Git Hub\DnDAudioPlayer\Adventure'
+    combat_folder = r'C:\Users\patk1\OneDrive\Desktop\Git Hub\DnDAudioPlayer\Combat'
+
+    current_theme = None # Variable to store the current theme
+
+
+    running = True
+
+    while running:
+        # Print Menu of Options
+        print(f'Select a musically theme for your DnD game! \n1. Adventure \n2. Combat \n3. Exit\n\n')
+        
+        selection = int(input('Enter the number of your selection: '))
+            # Check Selection
+        if selection == 1:
+
+            # Check for currently playing music
+            if current_theme:
+                stop_music()
+            
+            # Play Adventure Theme
+            play_theme(adventure_folder)
+            # Set the current theme
+            current_theme = 'Adventure'
+            # Console Log
+            print('Adventure Theme Selected')
+            
+            
+
+            
+        elif selection == 2:\
+        
+            # Check for currently playing music
+            if current_theme:
+                stop_music()
+            
+            # Play Adventure Theme
+            play_theme(combat_folder)
+            # Set the current theme
+            current_theme = 'Combat'
+            # Console Log
+            print('Combat Theme Selected')
+            
+
+        elif selection == 3:
+            running = False
+            print('Exiting...')
 
 # Init Main Script
 __init__ = ["main"]
