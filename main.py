@@ -49,10 +49,13 @@ def main():
     pygame.init()
     pygame.mixer.init()
 
+    # Get the project root directory
+    repo_root = os.path.abspath(os.path.dirname(__file__))
+
     # Location of music theme folders
-    adventure_folder = r'C:\Users\patk1\OneDrive\Desktop\Git Hub\DnDAudioPlayer\Adventure'
-    combat_folder = r'C:\Users\patk1\OneDrive\Desktop\Git Hub\DnDAudioPlayer\Combat'
-    background_folder = r'C:\Users\patk1\OneDrive\Desktop\Git Hub\DnDAudioPlayer\Background Noises'
+    adventure_folder = os.path.join(repo_root, r'Adventure')
+    combat_folder = os.path.join(repo_root, r'Combat')
+    background_folder = os.path.join(repo_root, r'Background Noises')
 
     current_theme = None # Variable to store the current theme
 
