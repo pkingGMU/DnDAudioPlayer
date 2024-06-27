@@ -6,6 +6,7 @@ import random
 import threading
 import sys
 
+global random_song
 
 def play_background(folder: str, track: str = None):
     '''
@@ -20,13 +21,15 @@ def play_theme(folder: str, fade_in_duration: int = 2000, track: str = None):
     '''
     Function to play a theme from a folder
     '''
+    global random_song
+    random_song = random.choice(os.listdir(folder))
     
-
-    
-    full_path = os.path.join(folder, random.choice(os.listdir(folder)))
+    full_path = os.path.join(folder, random_song)
 
     pygame.mixer.music.load(full_path)
     pygame.mixer.music.play(-1, fade_ms=fade_in_duration)  # -1 means loop indefinitely
+
+    
 
     
 
@@ -74,12 +77,12 @@ def main():
                stop_music()
 
             # Play Adventure Theme
-            play_theme(adventure_folder )
+            play_theme(adventure_folder)
             
             # Set the current theme
             current_theme = 'Adventure'
             # Console Log
-            print('Adventure Theme Selected')
+            print(f'Adventure Theme Selected - {random_song}' )
             
             
 
@@ -95,7 +98,7 @@ def main():
             # Set the current theme
             current_theme = 'Combat'
             # Console Log
-            print('Combat Theme Selected')
+            print(f'Combat Theme Selected - {random_song}')
         
         elif selection == 3:
 
