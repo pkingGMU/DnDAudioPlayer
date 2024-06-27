@@ -20,14 +20,13 @@ def play_theme(folder: str, fade_in_duration: int = 2000, track: str = None):
     '''
     Function to play a theme from a folder
     '''
-
     
 
-    if track is None:
-        full_path = os.path.join(folder, random.choice(os.listdir(folder)))
+    
+    full_path = os.path.join(folder, random.choice(os.listdir(folder)))
 
-        pygame.mixer.music.load(full_path)
-        pygame.mixer.music.play(-1, fade_ms=fade_in_duration)  # -1 means loop indefinitely
+    pygame.mixer.music.load(full_path)
+    pygame.mixer.music.play(-1, fade_ms=fade_in_duration)  # -1 means loop indefinitely
 
     
 
@@ -74,8 +73,6 @@ def main():
             if current_theme:
                stop_music()
 
-
-            
             # Play Adventure Theme
             play_theme(adventure_folder )
             
