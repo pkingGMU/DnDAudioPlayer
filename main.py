@@ -1,33 +1,27 @@
 # Local Imports
 import pygame
-import time
 import os
 import random 
-import threading
 import sys
 
 global random_song
 
-def play_background(folder: str, track: str = None):
-    '''
-    Function to play background noises
-    '''
-    full_path = os.path.join(folder, random.choice(os.listdir(folder)))
 
-    pygame.mixer.music.load(full_path)
-    pygame.mixer.music.play(-1)  # -1 means loop indefinitely
 
 def play_theme(folder: str, fade_in_duration: int = 2000, track: str = None):
     '''
     Function to play a theme from a folder
     '''
+
     global random_song
     random_song = random.choice(os.listdir(folder))
     
     full_path = os.path.join(folder, random_song)
-
-    pygame.mixer.music.load(full_path)
-    pygame.mixer.music.play(-1, fade_ms=fade_in_duration)  # -1 means loop indefinitely
+    print (folder)
+    if r'Background Noises' in folder:
+        channel1.play(pygame.mixer.Sound(full_path), fade_ms=fade_in_duration, loops=-1)
+    else:
+        channel2.play(pygame.mixer.Sound(full_path), fade_ms=fade_in_duration, loops=-1)
 
     
 
@@ -50,6 +44,12 @@ def main():
     # Init Pygame and Pygame Mixer
     pygame.init()
     pygame.mixer.init()
+    pygame.mixer.set_num_channels(2)
+
+    # create separate Channel objects for simultaneous playback
+    global channel1, channel2
+    channel1 = pygame.mixer.Channel(0) # argument must be int
+    channel2 = pygame.mixer.Channel(1)
 
     # Get the project root directory
     repo_root = os.path.abspath(os.path.dirname(__file__))
@@ -103,10 +103,40 @@ def main():
         elif selection == 3:
 
             # Background Menu
-            print(f'Select a background noise for your DnD game! \n1. Cave \n2. Forest \n3. Tavern \n4. Town \n5. Exit\n\n')
-            background_selection = int(input('Enter the number of your selection: '))
+            print(f'Select a background noise for your DnD game! \n1. Cave \n2. Forest \n3. Tavern \n4. Town \n5. Rain \n6. Exit\n\n')
+            bg_selection = int(input('Enter the number of your selection: '))
             # Play Background Noises
-            play_background(background_folder)
+            #play_background(background_folder, background_selection)
+
+            match bg_selection:
+                case 1:
+                    # Get file path for subfolder selected
+                    folder = os.path.join(background_folder, r'Cave')
+                    play_theme(folder)
+                case 2:
+                    # Get file path for subfolder selected
+                    folder = os.path.join(background_folder, r'Forest')
+                    play_theme(folder)
+                case 3:
+                    # Get file path for subfolder selected
+                    folder = os.path.join(background_folder, r'Tavern')
+                    play_theme(folder)
+                case 4:
+                    # Get file path for subfolder selected
+                    folder = os.path.join(background_folder, r'Town')
+                    play_theme(folder)
+                case 5:
+                    # Get file path for subfolder selected
+                    folder = os.path.join(background_folder, r'Rain')
+                    play_theme(folder)
+                case 6:
+                    sys.exit()
+                case _:
+                    print('Invalid Selection')
+                    sys.exit()
+
+            
+
             
 
         elif selection == 4:
