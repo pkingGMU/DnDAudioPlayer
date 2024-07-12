@@ -4,11 +4,12 @@ import os
 import random 
 import sys
 
+
 global random_song
 
 
 
-def play_theme(folder: str, fade_in_duration: int = 2000, track: str = None):
+def play_theme(folder: str, fade_in_duration: int = 1000, track: str = None):
     '''
     Function to play a theme from a folder
     '''
@@ -19,8 +20,11 @@ def play_theme(folder: str, fade_in_duration: int = 2000, track: str = None):
     full_path = os.path.join(folder, random_song)
     print (folder)
     if r'Background Noises' in folder:
+        # stop any currently playing music
+        channel1.stop()
         channel1.play(pygame.mixer.Sound(full_path), fade_ms=fade_in_duration, loops=-1)
     else:
+        
         channel2.play(pygame.mixer.Sound(full_path), fade_ms=fade_in_duration, loops=-1)
 
     
@@ -28,7 +32,7 @@ def play_theme(folder: str, fade_in_duration: int = 2000, track: str = None):
     
 
 
-def stop_music(fade_out_duration: int = 5000):
+def stop_music(fade_out_duration: int = 4000):
     '''
     Function to stop music
     '''
@@ -65,8 +69,12 @@ def main():
     running = True
 
     while running:
+
+       
+
         # Print Menu of Options
-        print(f'Select a musically theme for your DnD game! \n1. Adventure \n2. Combat \n3. Background Noiises \n4. Exit\n\n')
+        print(f'Select a musically theme for your DnD game! \n1. Adventure \n2. Combat \n3. Background Noiises \n4. Volume Up \n5. Volume down\n6. Exit\n\n')
+
         
         selection = int(input('Enter the number of your selection: '))
             # Check Selection
@@ -79,7 +87,7 @@ def main():
             # Play Adventure Theme
             play_theme(adventure_folder)
             
-            # Set the current theme
+            # Set the current theme1
             current_theme = 'Adventure'
             # Console Log
             print(f'Adventure Theme Selected - {random_song}' )
@@ -107,6 +115,8 @@ def main():
             bg_selection = int(input('Enter the number of your selection: '))
             # Play Background Noises
             #play_background(background_folder, background_selection)
+            
+            
 
             match bg_selection:
                 case 1:
@@ -130,19 +140,34 @@ def main():
                     folder = os.path.join(background_folder, r'Rain')
                     play_theme(folder)
                 case 6:
-                    sys.exit()
+                    channel1.stop()
+                    
                 case _:
                     print('Invalid Selection')
                     sys.exit()
+                    
 
             
 
-            
 
         elif selection == 4:
+            # Volume Up
+            channel2.set_volume(channel2.get_volume() + 0.1)
+            print(f'Volume Up: {channel2.get_volume()}')
+
+        elif selection == 5:
+            # Volume Down
+            channel2.set_volume(channel2.get_volume() - 0.1)
+            print(f'Volume Down: {channel2.get_volume()}')     
+
+        elif selection == 6:
             running = False
             print('Exiting...')
 
 # Init Main Script
 __init__ = ["main"]
 main()
+
+
+ # Volume control
+ 
